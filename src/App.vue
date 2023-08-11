@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 import { useLocalStorage } from "@vueuse/core";
 import Habit from "./components/Habit.vue";
 import Settings from "./components/Settings.vue";
@@ -7,7 +7,7 @@ import Hamburger from "./components/Hamburger.vue";
 import CreateHabitModal from "./components/CreateHabitModal.vue";
 import dayjs from "dayjs";
 import { nanoid } from "nanoid";
-import {mapTimestampsToDaysSince} from "./composables/mappers.ts"
+import { mapTimestampsToDaysSince } from "./composables/mappers.ts";
 
 const habitsDb = useLocalStorage<
   { id: string; name: string; frequency: string; color: string }[]
@@ -28,9 +28,6 @@ function onOutsideClicked() {
 // Database "Section"
 
 const days = ref<{ [index: string]: number[] }>({});
-watch(days.value, () => {
-  console.log(JSON.stringify(days.value))
-})
 function onDelete(id: string) {
   habitsDb.value = habitsDb.value.filter((habit) => habit.id !== id);
 }
@@ -76,7 +73,7 @@ function onUpdate(habitId: string, day: number) {
 onMounted(() => {
   // find all entries in daysDb for today and 6 days before
   const today = dayjs().valueOf();
-  const sixDaysBefore = dayjs().subtract(6, "day").valueOf();
+  const sixDaysBefore = dayjs().subtract(7, "day").valueOf();
   const daysInRange = daysDb.value.filter(
     (day) => day.timestamp >= sixDaysBefore && day.timestamp <= today,
   );
@@ -95,7 +92,7 @@ onMounted(() => {
   // if (habitContainerRef.value) {
   //   habitContainerRef.value.addEventListener("dragover", (ev) => {
   //     if (ev.dataTransfer) {
-  //        ev.dataTransfer.dropEffect = "move"; 
+  //        ev.dataTransfer.dropEffect = "move";
   //     }
   //   })
   //   habitContainerRef.value.addEventListener("drop", (ev) => {

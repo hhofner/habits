@@ -83,7 +83,7 @@ onMounted(() => {
       e.dataTransfer?.setData("text/plain", props.id);
     });
   }
-})
+});
 </script>
 
 <template>
