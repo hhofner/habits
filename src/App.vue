@@ -147,11 +147,12 @@ const habitContainerRef = ref<HTMLElement | null>(null);
         + New Habit
       </button>
     </section>
+    <Teleport to="#modal">
     <CreateHabitModal
-      v-if="openModal"
+      :show="openModal"
       @close="openModal = false"
       @create="onCreate"
-    />
+    /></Teleport>
   </div>
 </template>
 

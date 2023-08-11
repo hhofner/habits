@@ -6,7 +6,9 @@ const color = ref("");
 const frequency = ref("");
 
 const emits = defineEmits(["close", "create"]);
-
+defineProps({
+  show: Boolean
+})
 function createHabit() {
   if (!name.value || !color.value || !frequency.value) {
     return;
@@ -20,7 +22,8 @@ function createHabit() {
 </script>
 
 <template>
-  <div class="z-20 w-full h-screen absolute top-0 left-0">
+  <Transition name="modal">
+  <div v-if="show" class="z-20 w-screen h-screen fixed text-white">
     <div
       @click="$emit('close')"
       class="w-full h-full bg-black opacity-60"
@@ -139,4 +142,21 @@ function createHabit() {
       </div>
     </div>
   </div>
+</Transition>
 </template>
+
+<style scoped>
+  .modal-enter-from {
+  opacity: 0;
+}
+
+.modal-leave-to {
+  opacity: 0;
+}
+
+.modal-enter-from .modal-container,
+.modal-leave-to .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+  </style>
