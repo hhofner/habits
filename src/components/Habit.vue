@@ -1,79 +1,100 @@
 <script setup lang="ts">
-import { ref, watch,computed } from 'vue'
-import dayjs from 'dayjs'
-import CloseButton from './CloseButton.vue'
+import { ref, watch, computed, onMounted } from "vue";
+import dayjs from "dayjs";
+import CloseButton from "./CloseButton.vue";
 
 const dayMap: { [index: number]: string } = {
-  0: 'Sun',
-  1: 'Mon',
-  2: 'Tue',
-  3: 'Wed',
-  4: 'Thu',
-  5: 'Fri',
-  6: 'Sat',
-}
+  0: "Sun",
+  1: "Mon",
+  2: "Tue",
+  3: "Wed",
+  4: "Thu",
+  5: "Fri",
+  6: "Sat",
+};
 
-const props = withDefaults(defineProps<{
-  name: string
-  color?: string
-  frequency?: string
-  outsideClicked?: boolean
-  days: number[]
-}>(), {
-  color: 'gray',
-  outsideClicked: false,
-  frequency: 'Everyday',
-})
+const props = withDefaults(
+  defineProps<{
+    id: string;
+    name: string;
+    color?: string;
+    frequency?: string;
+    outsideClicked?: boolean;
+    days: number[];
+  }>(),
+  {
+    color: "gray",
+    outsideClicked: false,
+    frequency: "Everyday",
+  },
+);
 
-defineEmits(['update', 'delete'])
+defineEmits(["update", "delete"]);
 
 watch(
   () => props.outsideClicked,
   (val) => {
     if (val) {
-      isShaking.value = false
+      isShaking.value = false;
     }
-  }
-)
+  },
+);
 
-const timeOut = ref<number | undefined>(undefined)
-const isShaking = ref(false)
+const timeOut = ref<number | undefined>(undefined);
+const isShaking = ref(false);
 function onDown() {
   if (!isShaking.value && !props.outsideClicked) {
     timeOut.value = setTimeout(() => {
-      isShaking.value = true
-    }, 1000)
+      isShaking.value = true;
+    }, 1000);
   }
 }
 
 function onUp() {
-  clearTimeout(timeOut.value)
+  clearTimeout(timeOut.value);
 }
 
 const colorChosen = computed(() => {
   switch (props.color) {
-    case 'red':
-      return 'bg-red-500'
-    case 'green':
-      return 'bg-green-500'
-    case 'yellow':
-      return 'bg-yellow-500'
-    case 'blue':
-      return 'bg-sky-500'
-    case 'indigo':
-      return 'bg-indigo-500'
-    case 'rose':
-      return 'bg-rose-500'
-    case 'emerald':
-      return 'bg-emerald-500'
+    case "red":
+      return "bg-red-500";
+    case "green":
+      return "bg-green-500";
+    case "yellow":
+      return "bg-yellow-500";
+    case "blue":
+      return "bg-sky-500";
+    case "indigo":
+      return "bg-indigo-500";
+    case "rose":
+      return "bg-rose-500";
+    case "emerald":
+      return "bg-emerald-500";
     default:
-      return 'bg-gray-500'
+      return "bg-gray-500";
+  }
+});
+
+const habitRef = ref<HTMLDivElement | null>(null);
+
+onMounted(() => {
+  if (habitRef.value) {
+    habitRef.value.addEventListener("dragstart", (e) => {
+      e.dataTransfer?.setData("text/plain", props.id);
+    });
   }
 })
 </script>
+
 <template>
-  <div class="relative rounded-xl p-4 bg-gray-900 " :class="{ 'shaking': isShaking }" @pointerdown="onDown"
-    @pointerup="onUp">
+  <div
+    class="relative rounded-xl p-4 bg-gray-900"
+    :class="{ shaking: isShaking }"
+    @pointerdown="onDown"
+    @pointerup="onUp"
+    :draggable="isShaking"
+    ref="habitRef"
+  >
     <div class="absolute w-full h-5 left-0 -top-5 flex justify-center">
       <div class="w-11/12 h-full shadow-lg shadow-slate-700"></div>
     </div>
@@ -82,17 +103,28 @@ const colorChosen = computed(() => {
       <span class="text-gray-400">{{ frequency }}</span>
     </div>
     <div class="flex justify-between px-2">
-      <div v-for="(idx) in Array.from(Array(7).keys()).reverse()" class="flex flex-col items-center gap-1 button"
-        @click="$emit('update', idx)" :key="name + idx">
-        <span class="text-sm text-gray-400">{{ dayMap[dayjs().subtract(idx, 'd').day()] }}</span>
-        <div class="rounded-full bg-gray-800 w-8 h-8 flex justify-center p-1"
-          :class="days.includes(idx) ? colorChosen : ''">
-          {{ dayjs().subtract(idx, 'd').date().toString()
-          }}</div>
+      <div
+        v-for="idx in Array.from(Array(7).keys()).reverse()"
+        class="flex flex-col items-center gap-1 button"
+        @click="$emit('update', idx)"
+        :key="name + idx"
+      >
+        <span class="text-sm text-gray-400">{{
+          dayMap[dayjs().subtract(idx, "d").day()]
+        }}</span>
+        <div
+          class="rounded-full bg-gray-800 w-8 h-8 flex justify-center p-1"
+          :class="days.includes(idx) ? colorChosen : ''"
+        >
+          {{ dayjs().subtract(idx, "d").date().toString() }}
+        </div>
       </div>
     </div>
     <Transition>
-      <div v-if="isShaking" class="absolute top-0 right-0 -translate-y-2 translate-x-2">
+      <div
+        v-if="isShaking"
+        class="absolute top-0 right-0 -translate-y-2 translate-x-2"
+      >
         <CloseButton @click="$emit('delete')" />
       </div>
     </Transition>
@@ -134,4 +166,3 @@ const colorChosen = computed(() => {
   }
 }
 </style>
-
