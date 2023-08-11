@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useLocalStorage } from "@vueuse/core";
 import Habit from "./components/Habit.vue";
 import Settings from "./components/Settings.vue";
@@ -7,6 +7,7 @@ import Hamburger from "./components/Hamburger.vue";
 import CreateHabitModal from "./components/CreateHabitModal.vue";
 import dayjs from "dayjs";
 import { nanoid } from "nanoid";
+import {mapTimestampsToDaysSince} from "./composables/mappers.ts"
 
 const habitsDb = useLocalStorage<
   { id: string; name: string; frequency: string; color: string }[]
@@ -27,7 +28,9 @@ function onOutsideClicked() {
 // Database "Section"
 
 const days = ref<{ [index: string]: number[] }>({});
-
+watch(days.value, () => {
+  console.log(JSON.stringify(days.value))
+})
 function onDelete(id: string) {
   habitsDb.value = habitsDb.value.filter((habit) => habit.id !== id);
 }
@@ -82,10 +85,10 @@ onMounted(() => {
     if (days.value[day.habitsId]) {
       days.value[day.habitsId] = [
         ...days.value[day.habitsId],
-        dayjs(day.timestamp).day(),
+        mapTimestampsToDaysSince(day.timestamp),
       ];
     } else {
-      days.value[day.habitsId] = [dayjs(day.timestamp).day()];
+      days.value[day.habitsId] = [mapTimestampsToDaysSince(day.timestamp)];
     }
   });
 
