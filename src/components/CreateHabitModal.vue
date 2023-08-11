@@ -20,10 +20,11 @@ function createHabit() {
 </script>
 
 <template>
-  <div class="w-full h-screen absolute top-0 left-0">
+  <div class="z-20 w-full h-screen absolute top-0 left-0">
     <div @click="$emit('close')" class="w-full h-full bg-black opacity-60"></div>
     <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4">
       <div class="rounded-xl p-4 bg-gray-900 flex flex-col gap-2">
+        <h1 class="text-xl w-full text-center">New Habit</h1>
         <label>
           <span class="text-lg">Name</span>
           <input type="text" class="rounded w-full bg-slate-300 text-black text-[16px]" v-model="name">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch,computed } from 'vue'
 import dayjs from 'dayjs'
 import CloseButton from './CloseButton.vue'
 
@@ -13,35 +13,70 @@ const dayMap: { [index: number]: string } = {
   6: 'Sat',
 }
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   name: string
   color?: string
   frequency?: string
+  outsideClicked?: boolean
   days: number[]
 }>(), {
   color: 'gray',
+  outsideClicked: false,
   frequency: 'Everyday',
 })
 
 defineEmits(['update', 'delete'])
 
+watch(
+  () => props.outsideClicked,
+  (val) => {
+    if (val) {
+      isShaking.value = false
+    }
+  }
+)
+
 const timeOut = ref<number | undefined>(undefined)
 const isShaking = ref(false)
 function onDown() {
-  if (!isShaking.value) {
+  if (!isShaking.value && !props.outsideClicked) {
     timeOut.value = setTimeout(() => {
       isShaking.value = true
     }, 1000)
-  } 
+  }
 }
 
 function onUp() {
   clearTimeout(timeOut.value)
 }
+
+const colorChosen = computed(() => {
+  switch (props.color) {
+    case 'red':
+      return 'bg-red-500'
+    case 'green':
+      return 'bg-green-500'
+    case 'yellow':
+      return 'bg-yellow-500'
+    case 'blue':
+      return 'bg-sky-500'
+    case 'indigo':
+      return 'bg-indigo-500'
+    case 'rose':
+      return 'bg-rose-500'
+    case 'emerald':
+      return 'bg-emerald-500'
+    default:
+      return 'bg-gray-500'
+  }
+})
 </script>
 <template>
-  <div class="relative rounded-xl p-4 bg-gray-900" :class="{ 'shaking': isShaking }" @pointerdown="onDown"
+  <div class="relative rounded-xl p-4 bg-gray-900 " :class="{ 'shaking': isShaking }" @pointerdown="onDown"
     @pointerup="onUp">
+    <div class="absolute w-full h-5 left-0 -top-5 flex justify-center">
+      <div class="w-11/12 h-full shadow-lg shadow-slate-700"></div>
+    </div>
     <div class="flex justify-between mb-2">
       <span class="text-lg">{{ name }}</span>
       <span class="text-gray-400">{{ frequency }}</span>
@@ -50,7 +85,8 @@ function onUp() {
       <div v-for="(idx) in Array.from(Array(7).keys()).reverse()" class="flex flex-col items-center gap-1 button"
         @click="$emit('update', idx)" :key="name + idx">
         <span class="text-sm text-gray-400">{{ dayMap[dayjs().subtract(idx, 'd').day()] }}</span>
-        <div class="rounded-full bg-gray-800 w-8 h-8 flex justify-center p-1" :class="{ 'bg-red-600': days.includes(idx) }">
+        <div class="rounded-full bg-gray-800 w-8 h-8 flex justify-center p-1"
+          :class="days.includes(idx) ? colorChosen : ''">
           {{ dayjs().subtract(idx, 'd').date().toString()
           }}</div>
       </div>
