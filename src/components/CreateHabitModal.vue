@@ -23,13 +23,13 @@ function createHabit() {
 
 <template>
   <Transition name="modal">
-  <div v-if="show" class="z-20 w-screen h-screen fixed text-white">
+  <div v-if="show" class="z-20 w-full h-full fixed top-0 left-0 text-white transition-opacity">
     <div
       @click="$emit('close')"
       class="w-full h-full bg-black opacity-60"
     ></div>
     <div
-      class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4"
+      class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
     >
       <div class="rounded-xl p-4 bg-gray-900 flex flex-col gap-2">
         <h1 class="text-xl w-full text-center">New Habit</h1>
@@ -146,7 +146,7 @@ function createHabit() {
 </template>
 
 <style scoped>
-  .modal-enter-from {
+.modal-enter-from {
   opacity: 0;
 }
 
