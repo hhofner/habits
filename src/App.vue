@@ -114,7 +114,7 @@ const habitContainerRef = ref<HTMLElement | null>(null);
     class="container max-w-sm mx-auto p-2 pt-6 text-white relative overflow-x-clip"
   >
     <div
-      class="w-screen h-screen absolute top-0 left-0"
+      class="w-screen h-full absolute top-0 left-0"
       @click="onOutsideClicked"
     ></div>
     <header
