@@ -5,6 +5,7 @@ import Habit from "./components/Habit.vue";
 import Settings from "./components/Settings.vue";
 import Hamburger from "./components/Hamburger.vue";
 import CreateHabitModal from "./components/CreateHabitModal.vue";
+import AboutModal from "./components/AboutModal.vue";
 import dayjs from "dayjs";
 import { nanoid } from "nanoid";
 import { mapTimestampsToDaysSince } from "./composables/mappers.ts";
@@ -17,6 +18,7 @@ const daysDb = useLocalStorage<
 >("days", []);
 
 const openModal = ref(false);
+const openAboutModal = ref(false);
 const outsideClicked = ref(false);
 function onOutsideClicked() {
   outsideClicked.value = true;
@@ -108,7 +110,6 @@ onMounted(() => {
 
 const habitContainerRef = ref<HTMLElement | null>(null);
 </script>
-
 <template>
   <div
     class="container max-w-sm mx-auto p-2 pt-6 text-white relative overflow-x-clip"
@@ -120,7 +121,7 @@ const habitContainerRef = ref<HTMLElement | null>(null);
     <header
       class="flex justify-between py-4 mb-2 items-center sticky top-0 z-10 bg-black"
     >
-      <Hamburger />
+      <Hamburger @click="openAboutModal = true" />
       <h1 class="text-2xl">Habits</h1>
       <Settings />
     </header>
@@ -148,11 +149,18 @@ const habitContainerRef = ref<HTMLElement | null>(null);
       </button>
     </section>
     <Teleport to="#modal">
-    <CreateHabitModal
-      :show="openModal"
-      @close="openModal = false"
-      @create="onCreate"
-    /></Teleport>
+      <CreateHabitModal
+        :show="openModal"
+        @close="openModal = false"
+        @create="onCreate"
+      />
+    </Teleport>
+    <Teleport to="#modal">
+      <AboutModal
+        :show="openAboutModal"
+        @close="openAboutModal = false"
+      />
+    </Teleport>
   </div>
 </template>
 
