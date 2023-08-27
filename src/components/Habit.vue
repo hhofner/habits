@@ -23,7 +23,6 @@ const props = withDefaults(
   }>(),
   {
     color: "gray",
-    outsideClicked: false,
     frequency: "Everyday",
   },
 );
@@ -33,7 +32,7 @@ defineEmits(["update", "delete"]);
 const timeOut = ref<number | undefined>(undefined);
 const isShaking = ref(false);
 function onDown() {
-  if (!isShaking.value && !props.outsideClicked) {
+  if (!isShaking.value) {
     timeOut.value = window.setTimeout(() => {
       isShaking.value = true;
     }, 1000);
@@ -58,8 +57,8 @@ watch(isShaking, () => {
 });
 
 
-const colorChosen = computed(() => {
-  switch (props.color) {
+function getColorChosen (color: string) {
+  switch (color) {
     case "red":
       return "bg-red-500";
     case "green":
@@ -77,7 +76,28 @@ const colorChosen = computed(() => {
     default:
       return "bg-gray-500";
   }
-});
+}
+
+function getSoftColorChosen (color: string) {
+  switch (color) {
+    case "red":
+      return "bg-red-300";
+    case "green":
+      return "bg-green-300";
+    case "yellow":
+      return "bg-yellow-300";
+    case "blue":
+      return "bg-sky-300";
+    case "indigo":
+      return "bg-indigo-300";
+    case "rose":
+      return "bg-rose-300";
+    case "emerald":
+      return "bg-emerald-300";
+    default:
+      return "bg-gray-300";
+  }
+}
 
 const habitRef = ref<HTMLDivElement | null>(null);
 
@@ -119,7 +139,7 @@ onMounted(() => {
         }}</span>
         <div
           class="rounded-full bg-gray-800 w-8 h-8 flex justify-center p-1"
-          :class="days.includes(idx) ? colorChosen : ''"
+          :class="days.includes(idx) ? getColorChosen(props.color) : ''"
         >
           {{ dayjs().subtract(idx, "d").date().toString() }}
         </div>
