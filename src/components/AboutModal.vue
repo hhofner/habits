@@ -11,7 +11,7 @@ defineProps({
       @click="$emit('close')"
       class="w-full h-full bg-black opacity-60"
     ></div>
-		<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-w-sm">
+		<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
 			<div class="rounded-xl p-4 bg-gray-900 flex flex-col gap-2">
 				<h1 class="text-xl w-full text-center">About</h1>
 				<p>
