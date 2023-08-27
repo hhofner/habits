@@ -44,7 +44,7 @@ const timeOut = ref<number | undefined>(undefined);
 const isShaking = ref(false);
 function onDown() {
   if (!isShaking.value && !props.outsideClicked) {
-    timeOut.value = setTimeout(() => {
+    timeOut.value = window.setTimeout(() => {
       isShaking.value = true;
     }, 1000);
   }
