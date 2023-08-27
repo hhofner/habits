@@ -19,13 +19,6 @@ const daysDb = useLocalStorage<
 
 const openModal = ref(false);
 const openAboutModal = ref(false);
-const outsideClicked = ref(false);
-function onOutsideClicked() {
-  outsideClicked.value = true;
-  setTimeout(() => {
-    outsideClicked.value = false;
-  }, 100);
-}
 
 // Database "Section"
 
@@ -114,10 +107,6 @@ const habitContainerRef = ref<HTMLElement | null>(null);
   <div
     class="container max-w-sm mx-auto p-2 pt-6 text-white relative overflow-x-clip"
   >
-    <div
-      class="w-screen h-full absolute top-0 left-0"
-      @click="onOutsideClicked"
-    ></div>
     <header
       class="flex justify-between py-4 mb-2 items-center sticky top-0 z-10 bg-black"
     >
@@ -135,7 +124,6 @@ const habitContainerRef = ref<HTMLElement | null>(null);
           :name="habit.name"
           :frequency="habit.frequency"
           :days="days[habit.id] ? days[habit.id] : []"
-          :outside-clicked="outsideClicked"
           @delete="onDelete(habit.id)"
           @update="($event) => onUpdate(habit.id, $event)"
           :color="habit.color"

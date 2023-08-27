@@ -19,7 +19,6 @@ const props = withDefaults(
     name: string;
     color?: string;
     frequency?: string;
-    outsideClicked?: boolean;
     days: number[];
   }>(),
   {
@@ -30,15 +29,6 @@ const props = withDefaults(
 );
 
 defineEmits(["update", "delete"]);
-
-watch(
-  () => props.outsideClicked,
-  (val) => {
-    if (val) {
-      isShaking.value = false;
-    }
-  },
-);
 
 const timeOut = ref<number | undefined>(undefined);
 const isShaking = ref(false);
@@ -53,6 +43,20 @@ function onDown() {
 function onUp() {
   clearTimeout(timeOut.value);
 }
+
+function onOutsideClicked() {
+  isShaking.value = false;
+}
+
+watch(isShaking, () => {
+  // attach eventlistener on body to detect outside click
+  if (isShaking.value) {
+    document.body.addEventListener("pointerdown", onOutsideClicked);
+  } else {
+    document.body.removeEventListener("pointerdown", onOutsideClicked);
+  }
+});
+
 
 const colorChosen = computed(() => {
   switch (props.color) {
@@ -98,7 +102,7 @@ onMounted(() => {
     <div class="absolute w-full h-5 left-0 -top-5 flex justify-center">
       <div class="w-11/12 h-full shadow-lg shadow-slate-700"></div>
     </div>
-    <div class="flex justify-between mb-2">
+    <div class="flex justify-between mb-2 select-none">
       <span class="text-lg">{{ name }}</span>
       <span class="text-gray-400">{{ frequency }}</span>
     </div>
@@ -109,7 +113,8 @@ onMounted(() => {
         @click="$emit('update', idx)"
         :key="name + idx"
       >
-        <span class="text-sm text-gray-400">{{
+        <span class="text-sm text-gray-400 select-none">
+          {{
           dayMap[dayjs().subtract(idx, "d").day()]
         }}</span>
         <div
