@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from "vue";
+import { ref, watch, onMounted } from "vue";
 import dayjs from "dayjs";
 import CloseButton from "./CloseButton.vue";
 
@@ -75,27 +75,6 @@ function getColorChosen (color: string) {
       return "bg-emerald-500";
     default:
       return "bg-gray-500";
-  }
-}
-
-function getSoftColorChosen (color: string) {
-  switch (color) {
-    case "red":
-      return "bg-red-300";
-    case "green":
-      return "bg-green-300";
-    case "yellow":
-      return "bg-yellow-300";
-    case "blue":
-      return "bg-sky-300";
-    case "indigo":
-      return "bg-indigo-300";
-    case "rose":
-      return "bg-rose-300";
-    case "emerald":
-      return "bg-emerald-300";
-    default:
-      return "bg-gray-300";
   }
 }
 
