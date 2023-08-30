@@ -35,7 +35,7 @@ function onDown() {
   if (!isShaking.value) {
     timeOut.value = window.setTimeout(() => {
       isShaking.value = true;
-    }, 1000);
+    }, 2000);
   }
 }
 

@@ -125,7 +125,7 @@ const habitContainerRef = ref<HTMLElement | null>(null);
           :frequency="habit.frequency"
           :days="days[habit.id] ? days[habit.id] : []"
           @delete="onDelete(habit.id)"
-          @update="($event) => onUpdate(habit.id, $event)"
+          @update="($event: number) => onUpdate(habit.id, $event)"
           :color="habit.color"
         />
       </TransitionGroup>
