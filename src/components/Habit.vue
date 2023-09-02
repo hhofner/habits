@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from "vue";
 import dayjs from "dayjs";
-import { getColor } from '../composables/mappers.ts'
-import { HABIT_FREQUENCY } from '../types'
+import { getColor } from "../composables/mappers.ts";
+import { HABIT_FREQUENCY } from "../types";
 import CloseButton from "./CloseButton.vue";
 
 const dayMap: { [index: number]: string } = {

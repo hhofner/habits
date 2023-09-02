@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { HABIT_FREQUENCY } from '../types'
+import { HABIT_FREQUENCY } from "../types";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
@@ -11,8 +11,7 @@ export function mapTimestampsToDaysSince(timestamp: number): number {
 // For example, 0 -> today, 1 -> yesterday, 2 -> two days ago, etc.
 export function mapDaysSinceToTimestamps() {}
 
-
-const DEFAULT_COLOR = "bg-gray-500"
+const DEFAULT_COLOR = "bg-gray-500";
 export function getColorChosen(color: string) {
   switch (color) {
     case "red":
@@ -55,20 +54,25 @@ export function getSecondaryColorChosen(color: string) {
   }
 }
 
-export function getColor(days: Array<number>, listedDay: number, color: string, frequency: HABIT_FREQUENCY): string {
+export function getColor(
+  days: Array<number>,
+  listedDay: number,
+  color: string,
+  frequency: HABIT_FREQUENCY,
+): string {
   switch (frequency) {
     case HABIT_FREQUENCY.EVERYDAY:
-      return days.includes(listedDay) ? getColorChosen(color) : ''
+      return days.includes(listedDay) ? getColorChosen(color) : "";
     case HABIT_FREQUENCY.EVERY_OTHER_DAY:
       if (days.includes(listedDay)) {
-        return getColorChosen(color)
+        return getColorChosen(color);
       } else if (listedDay <= 5) {
         if (days.includes(listedDay + 1)) {
-          return getSecondaryColorChosen(color)
+          return getSecondaryColorChosen(color);
         }
-      } 
-      return DEFAULT_COLOR
+      }
+      return DEFAULT_COLOR;
     default:
-      return DEFAULT_COLOR
+      return DEFAULT_COLOR;
   }
 }
