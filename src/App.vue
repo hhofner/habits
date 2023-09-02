@@ -4,7 +4,6 @@ import { useLocalStorage } from "@vueuse/core";
 import Habit from "./components/Habit.vue";
 import Settings from "./components/Settings.vue";
 import Hamburger from "./components/Hamburger.vue";
-import CreateHabitModal from "./components/CreateHabitModal.vue";
 import AboutModal from "./components/AboutModal.vue";
 import dayjs from "dayjs";
 import { HABIT_FREQUENCY } from "./types";

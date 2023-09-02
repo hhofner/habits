@@ -60,7 +60,7 @@ watch(isShaking, () => {
 });
 
 function stopContextMenu() {
-  console.log('No context menu available, because its a mobile app')
+  console.log("No context menu available, because its a mobile app");
 }
 
 const habitRef = ref<HTMLDivElement | null>(null);
@@ -115,8 +115,11 @@ onMounted(() => {
         v-if="isShaking"
         class="absolute top-0 right-0 -translate-y-2 translate-x-2"
       >
-        <div class="absolute w-[200%] h-[200%] z-40" @click="$emit('delete')"></div>
-        <CloseButton/>
+        <div
+          class="absolute w-[200%] h-[200%] z-40"
+          @click="$emit('delete')"
+        ></div>
+        <CloseButton />
       </div>
     </Transition>
   </div>
