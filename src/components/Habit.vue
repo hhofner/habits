@@ -59,6 +59,10 @@ watch(isShaking, () => {
   }
 });
 
+function stopContextMenu() {
+  console.log('No context menu available, because its a mobile app')
+}
+
 const habitRef = ref<HTMLDivElement | null>(null);
 
 onMounted(() => {
@@ -72,17 +76,19 @@ onMounted(() => {
 
 <template>
   <div
-    class="relative rounded-xl p-4 bg-gray-900"
+    class="relative rounded-xl p-4 bg-gray-900 select-none"
     :class="{ shaking: isShaking }"
     @pointerdown="onDown"
     @pointerup="onUp"
+    @pointercancel="onUp"
+    @contextmenu.prevent="stopContextMenu"
     :draggable="isShaking"
     ref="habitRef"
   >
     <div class="absolute w-full h-5 left-0 -top-5 flex justify-center">
       <div class="w-11/12 h-full shadow-lg shadow-slate-700"></div>
     </div>
-    <div class="flex justify-between mb-2 select-none">
+    <div class="flex justify-between mb-2">
       <span class="text-lg">{{ name }}</span>
       <span class="text-gray-400">{{ frequency }}</span>
     </div>
@@ -93,7 +99,7 @@ onMounted(() => {
         @click="$emit('update', idx)"
         :key="name + idx"
       >
-        <span class="text-sm text-gray-400 select-none">
+        <span class="text-sm text-gray-400">
           {{ dayMap[dayjs().subtract(idx, "d").day()] }}</span
         >
         <div
@@ -109,7 +115,8 @@ onMounted(() => {
         v-if="isShaking"
         class="absolute top-0 right-0 -translate-y-2 translate-x-2"
       >
-        <CloseButton @click="$emit('delete')" />
+        <div class="absolute w-[200%] h-[200%] z-40" @click="$emit('delete')"></div>
+        <CloseButton/>
       </div>
     </Transition>
   </div>

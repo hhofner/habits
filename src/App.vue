@@ -19,7 +19,7 @@ const daysDb = useLocalStorage<
   { id: string; timestamp: number; habitsId: string }[]
 >("days", []);
 
-const openModal = ref(false);
+const isModalOpen = ref(false);
 const openAboutModal = ref(false);
 
 // Database "Section"
@@ -29,12 +29,16 @@ function onDelete(id: string) {
   habitsDb.value = habitsDb.value.filter((habit) => habit.id !== id);
 }
 
+function openModal() {
+  isModalOpen.value = true;
+}
+
 function onCreate(habit: {
   name: string;
   color: string;
   frequency: HABIT_FREQUENCY;
 }) {
-  openModal.value = false;
+  isModalOpen.value = false;
   nextTick(() => {
     const newId = nanoid();
     habitsDb.value.push({
@@ -138,20 +142,17 @@ const habitContainerRef = ref<HTMLElement | null>(null);
         />
       </TransitionGroup>
       <button
-        @click="openModal = true"
+        @click="openModal"
         class="z-10 flex justify-center text-gray-400 active:scale-90 transition-transform p-2 rounded-xl"
       >
         + New Habit
       </button>
     </section>
     <CreateHabitHalfsheet
-      :show="openModal"
-      @close="openModal = false"
+      :show="isModalOpen"
+      @close="isModalOpen = false"
       @create="onCreate"
     />
-    <Teleport to="#modal">
-      <CreateHabitModal @close="openModal = false" @create="onCreate" />
-    </Teleport>
     <Teleport to="#modal">
       <AboutModal :show="openAboutModal" @close="openAboutModal = false" />
     </Teleport>
