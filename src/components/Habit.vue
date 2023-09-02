@@ -56,8 +56,7 @@ watch(isShaking, () => {
   }
 });
 
-
-function getColorChosen (color: string) {
+function getColorChosen(color: string) {
   switch (color) {
     case "red":
       return "bg-red-500";
@@ -113,9 +112,8 @@ onMounted(() => {
         :key="name + idx"
       >
         <span class="text-sm text-gray-400 select-none">
-          {{
-          dayMap[dayjs().subtract(idx, "d").day()]
-        }}</span>
+          {{ dayMap[dayjs().subtract(idx, "d").day()] }}</span
+        >
         <div
           class="rounded-full bg-gray-800 w-8 h-8 flex justify-center p-1"
           :class="days.includes(idx) ? getColorChosen(props.color) : ''"

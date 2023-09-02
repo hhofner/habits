@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import { useLocalStorage } from "@vueuse/core";
 import Habit from "./components/Habit.vue";
 import Settings from "./components/Settings.vue";
@@ -9,6 +9,7 @@ import AboutModal from "./components/AboutModal.vue";
 import dayjs from "dayjs";
 import { nanoid } from "nanoid";
 import { mapTimestampsToDaysSince } from "./composables/mappers.ts";
+import CreateHabitHalfsheet from "./components/CreateHabitHalfsheet.vue";
 
 const habitsDb = useLocalStorage<
   { id: string; name: string; frequency: string; color: string }[]
@@ -28,13 +29,15 @@ function onDelete(id: string) {
 }
 
 function onCreate(habit: { name: string; color: string; frequency: string }) {
-  const newId = nanoid();
-  habitsDb.value.push({
-    id: newId,
-    ...habit,
-  });
-  days.value[newId] = [];
   openModal.value = false;
+  nextTick(() => {
+    const newId = nanoid();
+    habitsDb.value.push({
+      id: newId,
+      ...habit,
+    });
+    days.value[newId] = [];
+  });
 }
 
 function onUpdate(habitId: string, day: number) {
@@ -131,23 +134,21 @@ const habitContainerRef = ref<HTMLElement | null>(null);
       </TransitionGroup>
       <button
         @click="openModal = true"
-        class="z-10 flex justify-center text-gray-400 hover:bg-slate-800 transition-colors p-2 rounded-xl"
+        class="z-10 flex justify-center text-gray-400 active:scale-90 transition-transform p-2 rounded-xl"
       >
         + New Habit
       </button>
     </section>
+    <CreateHabitHalfsheet
+      :show="openModal"
+      @close="openModal = false"
+      @create="onCreate"
+    />
     <Teleport to="#modal">
-      <CreateHabitModal
-        :show="openModal"
-        @close="openModal = false"
-        @create="onCreate"
-      />
+      <CreateHabitModal @close="openModal = false" @create="onCreate" />
     </Teleport>
     <Teleport to="#modal">
-      <AboutModal
-        :show="openAboutModal"
-        @close="openAboutModal = false"
-      />
+      <AboutModal :show="openAboutModal" @close="openAboutModal = false" />
     </Teleport>
   </div>
 </template>
