@@ -7,12 +7,13 @@ import Hamburger from "./components/Hamburger.vue";
 import CreateHabitModal from "./components/CreateHabitModal.vue";
 import AboutModal from "./components/AboutModal.vue";
 import dayjs from "dayjs";
+import { HABIT_FREQUENCY } from './types'
 import { nanoid } from "nanoid";
 import { mapTimestampsToDaysSince } from "./composables/mappers.ts";
 import CreateHabitHalfsheet from "./components/CreateHabitHalfsheet.vue";
 
 const habitsDb = useLocalStorage<
-  { id: string; name: string; frequency: string; color: string }[]
+  { id: string; name: string; frequency: HABIT_FREQUENCY; color: string }[]
 >("habits", []);
 const daysDb = useLocalStorage<
   { id: string; timestamp: number; habitsId: string }[]
@@ -28,7 +29,7 @@ function onDelete(id: string) {
   habitsDb.value = habitsDb.value.filter((habit) => habit.id !== id);
 }
 
-function onCreate(habit: { name: string; color: string; frequency: string }) {
+function onCreate(habit: { name: string; color: string; frequency: HABIT_FREQUENCY }) {
   openModal.value = false;
   nextTick(() => {
     const newId = nanoid();

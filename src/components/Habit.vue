@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from "vue";
 import dayjs from "dayjs";
+import { getColor } from '../composables/mappers.ts'
+import { HABIT_FREQUENCY } from '../types'
 import CloseButton from "./CloseButton.vue";
 
 const dayMap: { [index: number]: string } = {
@@ -18,15 +20,16 @@ const props = withDefaults(
     id: string;
     name: string;
     color?: string;
-    frequency?: string;
+    frequency?: HABIT_FREQUENCY;
     days: number[];
   }>(),
   {
     color: "gray",
-    frequency: "Everyday",
+    frequency: HABIT_FREQUENCY.EVERYDAY,
   },
 );
 
+//:class="days.includes(idx) ? getColorChosen(props.color) : ''"
 defineEmits(["update", "delete"]);
 
 const timeOut = ref<number | undefined>(undefined);
@@ -55,27 +58,6 @@ watch(isShaking, () => {
     document.body.removeEventListener("pointerdown", onOutsideClicked);
   }
 });
-
-function getColorChosen(color: string) {
-  switch (color) {
-    case "red":
-      return "bg-red-500";
-    case "green":
-      return "bg-green-500";
-    case "yellow":
-      return "bg-yellow-500";
-    case "blue":
-      return "bg-sky-500";
-    case "indigo":
-      return "bg-indigo-500";
-    case "rose":
-      return "bg-rose-500";
-    case "emerald":
-      return "bg-emerald-500";
-    default:
-      return "bg-gray-500";
-  }
-}
 
 const habitRef = ref<HTMLDivElement | null>(null);
 
@@ -116,7 +98,7 @@ onMounted(() => {
         >
         <div
           class="rounded-full bg-gray-800 w-8 h-8 flex justify-center p-1"
-          :class="days.includes(idx) ? getColorChosen(props.color) : ''"
+          :class="getColor(props.days, idx, props.color, props.frequency)"
         >
           {{ dayjs().subtract(idx, "d").date().toString() }}
         </div>

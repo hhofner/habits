@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Halfsheet from "./Halfsheet.vue";
+import { HABIT_FREQUENCY } from '../types'
 
 const name = ref("");
 const color = ref("");
@@ -43,8 +44,8 @@ function createHabit() {
             class="rounded w-full bg-slate-300 text-black text-[16px]"
             v-model="frequency"
           >
-            <option>Everyday</option>
-            <option>Every other day</option>
+            <option :value="HABIT_FREQUENCY.EVERYDAY">Everyday</option>
+            <option :value="HABIT_FREQUENCY.EVERY_OTHER_DAY">Every other day</option>
           </select>
         </label>
         <div>
